@@ -1,0 +1,10 @@
+1 - The configuration parameters need to be set through environment variables
+    - Database connection parameters
+        -- MYSQL_HOST
+        -- MYSQL_DATABASE
+        -- MYSQL_PORT
+        -- MYSQL_USER
+        -- MYSQL_PASSWORD
+    - API parameters
+        -- BASE_URL             endpoint base url
+        -- PORT                 
