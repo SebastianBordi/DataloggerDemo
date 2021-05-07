@@ -5,6 +5,8 @@ import (
 
 	"github.com/sebastianbordi/DataloggerDemo/configuration"
 	"github.com/sebastianbordi/DataloggerDemo/database"
+	"github.com/sebastianbordi/DataloggerDemo/router"
+	"github.com/sebastianbordi/DataloggerDemo/server"
 )
 
 func main() {
@@ -13,6 +15,10 @@ func main() {
 		log.Panic(err)
 	}
 	configureDatabase(conf.GetDatabaseConf())
+	rtr := router.GetRouter()
+	srv := server.GetServer(conf.GetURLPort())
+
+	srv.Handler = rtr
 
 }
 
