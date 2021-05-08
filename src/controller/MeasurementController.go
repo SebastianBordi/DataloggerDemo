@@ -28,7 +28,7 @@ func (controller *measurementController) GetAll() (*[]model.Measurement, error) 
 	context := controller.dataContext.GetContext()
 
 	var result []model.Measurement
-	err := context.Find(&result).Error
+	err := context.Joins("sensors").Find(&result).Error
 	return &result, err
 }
 
@@ -36,7 +36,7 @@ func (controller *measurementController) GetById(id int) (*model.Measurement, er
 	context := controller.dataContext.GetContext()
 
 	var result model.Measurement
-	err := context.First(&result, id).Error
+	err := context.Joins("sensors").First(&result, id).Error
 	return &result, err
 }
 

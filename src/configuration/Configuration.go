@@ -28,11 +28,11 @@ func GetInstance() (*Config, error) {
 		instance.urlPort = os.Getenv("PORT")
 
 		instance.database = &DatabaseConf{}
-		instance.database.host = os.Getenv("MYSQL_HOST")
-		instance.database.port = os.Getenv("MYSQL_PORT")
-		instance.database.database = os.Getenv("MYSQL_DATABASE")
-		instance.database.user = os.Getenv("MYSQL_USER")
-		instance.database.password = os.Getenv("MYSQL_PASSWORD")
+		instance.database.host = os.Getenv("DATABASE_HOST")
+		instance.database.port = os.Getenv("DATABASE_PORT")
+		instance.database.database = os.Getenv("DATABASE_NAME")
+		instance.database.user = os.Getenv("DATABASE_USER")
+		instance.database.password = os.Getenv("DATABASE_PASSWORD")
 	}
 	return instance, nil
 }

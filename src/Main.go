@@ -21,7 +21,8 @@ func main() {
 	srv := server.GetServer(conf.GetURLPort())
 
 	srv.Handler = rtr
-
+	log.Printf("Listen and serve at :%s", conf.GetURLPort())
+	log.Fatal(srv.ListenAndServe())
 }
 
 func configureDatabase(config *configuration.DatabaseConf) {
