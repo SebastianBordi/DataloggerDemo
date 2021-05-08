@@ -17,7 +17,7 @@ func main() {
 	}
 	configureDatabase(conf.GetDatabaseConf())
 	initControllers()
-	rtr := router.GetRouter()
+	rtr := router.GetRouter(conf.GetBaseURL())
 	srv := server.GetServer(conf.GetURLPort())
 
 	srv.Handler = rtr
@@ -46,6 +46,6 @@ func initControllers() {
 
 	sensorController := controller.GetSensorController()
 	sensorController.InitSensorController(context)
-	temperatureController := controller.GetTemperatureController()
-	temperatureController.InitTemperatureController(context)
+	temperatureController := controller.GetMeasurementController()
+	temperatureController.InitMeasurementController(context)
 }

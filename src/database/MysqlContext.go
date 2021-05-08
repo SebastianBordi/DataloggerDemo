@@ -17,7 +17,11 @@ type mysqlContext struct {
 
 var instance *mysqlContext
 
+<<<<<<< HEAD:src/database/MysqlContext.go
 func getMySqlInstance() (*mysqlContext, error) {
+=======
+func GetInstance() (*mysqlContext, error) {
+>>>>>>> 4b4af171392f56cdea87281e99db27059bc23977:src/database/MysqlContext.go
 	var err error
 	if instance == nil {
 		instance = &mysqlContext{}

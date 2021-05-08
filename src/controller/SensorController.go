@@ -13,12 +13,22 @@ var sensorControllerInstance *sensorController
 
 func GetSensorController() *sensorController {
 	if sensorControllerInstance == nil {
+<<<<<<< HEAD
 		sensorControllerInstance = &sensorController{}
+=======
+		sensorControllerInstance = &sensorController{
+			dataContext: context,
+		}
+>>>>>>> 4b4af171392f56cdea87281e99db27059bc23977
 	}
 	return sensorControllerInstance
 }
 
+<<<<<<< HEAD
 func (sensorController) InitSensorController(context database.IContext) {
+=======
+func InitSensorController(context database.IContext) {
+>>>>>>> 4b4af171392f56cdea87281e99db27059bc23977
 	controller := GetSensorController()
 	controller.dataContext = context
 }
