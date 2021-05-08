@@ -3,15 +3,32 @@ package view
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/sebastianbordi/DataloggerDemo/controller"
+	"github.com/sebastianbordi/DataloggerDemo/model"
 )
 
 func CreateSensor(w http.ResponseWriter, r *http.Request) {
+	controller := controller.GetSensorController()
+	var sensor model.Sensor
+	err := json.NewDecoder(r.Body).Decode(&sensor)
+	if err != nil {
+		log.Println(err)
+		basicResponse(&w, 400, "error decoding the body")
+		return
+	}
+	newEntity, err := controller.Create(&sensor)
 
+	if err != nil {
+		log.Println(err)
+		basicResponse(&w, 500, "internal server error")
+		return
+	}
+	json.NewEncoder(w).Encode(newEntity)
 }
 
 func GetSensors(w http.ResponseWriter, r *http.Request) {
@@ -22,11 +39,11 @@ func GetSensors(w http.ResponseWriter, r *http.Request) {
 		if err.Error() == "record not found" {
 			basicResponse(&w, 404, "No sensor were found")
 		} else {
+			log.Println(err)
 			basicResponse(&w, 500, "Internal server error")
 		}
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(sensors)
 }
 
@@ -54,7 +71,22 @@ func GetSensorById(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateSensor(w http.ResponseWriter, r *http.Request) {
+	controller := controller.GetSensorController()
+	var sensor model.Sensor
+	err := json.NewDecoder(r.Body).Decode(&sensor)
+	if err != nil {
+		log.Println(err)
+		basicResponse(&w, 400, "error decoding the body")
+		return
+	}
+	newEntity, err := controller.Update(&sensor)
 
+	if err != nil {
+		log.Println(err)
+		basicResponse(&w, 500, "internal server error")
+		return
+	}
+	json.NewEncoder(w).Encode(newEntity)
 }
 
 func DeleteSensor(w http.ResponseWriter, r *http.Request) {
@@ -75,6 +107,5 @@ func DeleteSensor(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(sensor)
 }

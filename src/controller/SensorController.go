@@ -23,11 +23,21 @@ func (sensorController) InitSensorController(context database.IContext) {
 	controller.dataContext = context
 }
 
+func (controller *sensorController) Create(entity *model.Sensor) (*model.Sensor, error) {
+	context := controller.dataContext.GetContext()
+
+	err := context.Create(&entity).Error
+	return entity, err
+}
+
 func (controller *sensorController) GetAll() (*[]model.Sensor, error) {
 	context := controller.dataContext.GetContext()
 
 	var result []model.Sensor
 	err := context.Find(&result).Error
+	for i := 0; i < len(result); i++ {
+		result[i].Password = "****"
+	}
 	return &result, err
 }
 
@@ -36,6 +46,7 @@ func (controller *sensorController) GetById(id int) (*model.Sensor, error) {
 
 	var result model.Sensor
 	err := context.First(&result, id).Error
+	result.Password = "****"
 	return &result, err
 }
 
