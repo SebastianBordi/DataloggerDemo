@@ -1,7 +1,7 @@
 # DataloggerDemo
 
 <h4>Visual Studio code launch.json</h4>
-<h3>
+<p>
 {
     // Use IntelliSense para saber los atributos posibles.
     // Mantenga el puntero para ver las descripciones de los existentes atributos.
@@ -26,4 +26,4 @@
         }
     ]
 }
-</h3>
+</p>
