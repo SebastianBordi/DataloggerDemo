@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type databaseContext struct {
+type mysqlContext struct {
 	context     *gorm.DB
 	host        string `default:"127.0.0.1"`
 	database    string `default:"datalogger"`
@@ -15,12 +15,12 @@ type databaseContext struct {
 	initialized bool
 }
 
-var instance *databaseContext
+var instance *mysqlContext
 
-func GetInstance() (*databaseContext, error) {
+func GetInstance() (*mysqlContext, error) {
 	var err error
 	if instance == nil {
-		instance = &databaseContext{}
+		instance = &mysqlContext{}
 	}
 
 	return instance, err
@@ -28,7 +28,7 @@ func GetInstance() (*databaseContext, error) {
 
 //Initialize with parameters of current databaseContext structure
 //Return error from gorm.Open()
-func (ctx *databaseContext) Initialize() error {
+func (ctx *mysqlContext) Initialize() error {
 
 	db, err := gorm.Open(mysql.Open(ctx.GetConnectionString()), &gorm.Config{})
 	if err == nil {
@@ -41,26 +41,26 @@ func (ctx *databaseContext) Initialize() error {
 	return err
 }
 
-func (ctx *databaseContext) GetContext() *gorm.DB {
+func (ctx *mysqlContext) GetContext() *gorm.DB {
 	return ctx.context
 }
 
-func (ctx *databaseContext) GetConnectionString() string {
+func (ctx *mysqlContext) GetConnectionString() string {
 	return ctx.user + ":" + ctx.password + "@(" + ctx.host + ":" + ctx.port + ")/" + ctx.database + "?charset=utf8&parseTime=True&loc=Local"
 }
 
-func (ctx *databaseContext) SetHost(host string) {
+func (ctx *mysqlContext) SetHost(host string) {
 	ctx.host = host
 }
-func (ctx *databaseContext) SetPort(port string) {
+func (ctx *mysqlContext) SetPort(port string) {
 	ctx.port = port
 }
-func (ctx *databaseContext) SetDatabase(database string) {
+func (ctx *mysqlContext) SetDatabase(database string) {
 	ctx.database = database
 }
-func (ctx *databaseContext) SetUser(user string) {
+func (ctx *mysqlContext) SetUser(user string) {
 	ctx.user = user
 }
-func (ctx *databaseContext) SetPassword(password string) {
+func (ctx *mysqlContext) SetPassword(password string) {
 	ctx.password = password
 }
