@@ -20,7 +20,7 @@ func GetTemperatureController() *temperatureController {
 	return temperatureControllerInstance
 }
 
-func InitTemperatureController(context database.IContext) {
+func (temperatureController) InitTemperatureController(context database.IContext) {
 	controller := GetTemperatureController()
 	controller.dataContext = context
 }

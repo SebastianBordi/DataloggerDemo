@@ -17,7 +17,7 @@ type mysqlContext struct {
 
 var instance *mysqlContext
 
-func GetInstance() (*mysqlContext, error) {
+func getMySqlInstance() (*mysqlContext, error) {
 	var err error
 	if instance == nil {
 		instance = &mysqlContext{}
