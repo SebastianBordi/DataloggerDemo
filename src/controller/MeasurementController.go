@@ -7,45 +7,45 @@ import (
 	"github.com/sebastianbordi/DataloggerDemo/model"
 )
 
-type temperatureController struct {
+type measurementController struct {
 	dataContext database.IContext
 }
 
-var temperatureControllerInstance *temperatureController
+var measurementControllerInstance *measurementController
 
-func GetTemperatureController() *temperatureController {
-	if temperatureControllerInstance == nil {
-		temperatureControllerInstance = &temperatureController{}
+func GetMeasurementController() *measurementController {
+	if measurementControllerInstance == nil {
+		measurementControllerInstance = &measurementController{}
 	}
-	return temperatureControllerInstance
+	return measurementControllerInstance
 }
 
-func (temperatureController) InitTemperatureController(context database.IContext) {
-	controller := GetTemperatureController()
+func (measurementController) InitMeasurementController(context database.IContext) {
+	controller := GetMeasurementController()
 	controller.dataContext = context
 }
-func (controller *temperatureController) GetAll() (*[]model.Temperature, error) {
+func (controller *measurementController) GetAll() (*[]model.Measurement, error) {
 	context := controller.dataContext.GetContext()
 
-	var result []model.Temperature
+	var result []model.Measurement
 	err := context.Find(&result).Error
 	return &result, err
 }
 
-func (controller *temperatureController) GetById(id int) (*model.Temperature, error) {
+func (controller *measurementController) GetById(id int) (*model.Measurement, error) {
 	context := controller.dataContext.GetContext()
 
-	var result model.Temperature
+	var result model.Measurement
 	err := context.First(&result, id).Error
 	return &result, err
 }
 
-func (controller *temperatureController) Update(entity *model.Temperature) (*model.Temperature, error) {
+func (controller *measurementController) Update(entity *model.Measurement) (*model.Measurement, error) {
 
 	return nil, errors.New("the temeperature registers couldn't be modified")
 }
 
-func (controller *temperatureController) Delete(id int) (*model.Temperature, error) {
+func (controller *measurementController) Delete(id int) (*model.Measurement, error) {
 	context := controller.dataContext.GetContext()
 
 	entityBase, err := controller.GetById(id)
