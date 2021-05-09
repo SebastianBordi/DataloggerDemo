@@ -2,7 +2,7 @@ package model
 
 type MeasurementPostDto struct {
 	Temperature float64 `json:"temperature"`
-	Humedity    int     `json:"humedity"`
+	Humidity    int     `json:"humidity"`
 	Mac         string  `json:"mac"`
 	Password    string  `json:"password"`
 }

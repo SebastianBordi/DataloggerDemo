@@ -3,15 +3,36 @@ package view
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/sebastianbordi/DataloggerDemo/controller"
+	"github.com/sebastianbordi/DataloggerDemo/model"
 )
 
 func CreateMeasurement(w http.ResponseWriter, r *http.Request) {
+	controller := controller.GetMeasurementController()
+	var measurementDto model.MeasurementPostDto
+	err := json.NewDecoder(r.Body).Decode(&measurementDto)
+	if err != nil {
+		log.Println(err)
+		basicResponse(&w, 400, "can't decode body request")
+		return
+	}
+	measurement, err := controller.CreateFromPostDTO(&measurementDto)
 
+	if err != nil {
+		if err.Error() == "bad password" || err.Error() == "mac not found" {
+			basicResponse(&w, 401, "error identifying sensor")
+			return
+		}
+		log.Println(err)
+		basicResponse(&w, 400, "can't decode body request")
+		return
+	}
+	json.NewEncoder(w).Encode(measurement)
 }
 
 func GetMeasurements(w http.ResponseWriter, r *http.Request) {

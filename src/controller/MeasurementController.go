@@ -2,6 +2,9 @@ package controller
 
 import (
 	"errors"
+	"fmt"
+	"log"
+	"time"
 
 	"github.com/sebastianbordi/DataloggerDemo/database"
 	"github.com/sebastianbordi/DataloggerDemo/model"
@@ -31,18 +34,43 @@ func (controller *measurementController) Create(entity *model.Measurement) (*mod
 	err := context.Create(&entity).Error
 	return entity, err
 }
+func (controller *measurementController) CreateFromPostDTO(mesPostDto *model.MeasurementPostDto) (*model.Measurement, error) {
+	context := controller.dataContext.GetContext()
+	var sensor model.Sensor
+	var measurement model.Measurement
+	//validate sensor credentials
+	err := context.Where("mac = ?", mesPostDto.Mac).First(&sensor).Error
+	if err != nil {
+		newError := fmt.Errorf("getting sensor - %s", err)
+		log.Println(newError.Error())
+		return nil, newError
+	}
+	if sensor.Password != mesPostDto.Password {
+		return nil, errors.New("bad password")
+	}
+	//create measurement to persist
+	measurement.Datetime = time.Now()
+	measurement.Temperature = mesPostDto.Temperature
+	measurement.Humidity = mesPostDto.Humidity
+	measurement.IDSensor = sensor.IDSensor
+	//measurement.Sensor = sensor
+
+	err = context.Save(&measurement).Error
+	return &measurement, err
+}
 func (controller *measurementController) GetAll() (*[]model.Measurement, error) {
 	context := controller.dataContext.GetContext()
 
 	var result []model.Measurement
-	err := context.Joins("sensors").Find(&result).Error
+	err := context.Joins("Sensor").Find(&result).Error
+	//err := context.Find(&result).Joins("Sensor").Error
 	return &result, err
 }
 func (controller *measurementController) GetById(id int) (*model.Measurement, error) {
 	context := controller.dataContext.GetContext()
 
 	var result model.Measurement
-	err := context.Joins("sensors").First(&result, id).Error
+	err := context.Joins("Sensor").First(&result, id).Error
 	return &result, err
 }
 func (controller *measurementController) Update(entity *model.Measurement) (*model.Measurement, error) {

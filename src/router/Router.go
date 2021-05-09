@@ -14,11 +14,11 @@ func GetRouter(baseURL string) *mux.Router {
 	router.HandleFunc(baseURL+"/sensor", view.UpdateSensor).Methods("PUT")
 	router.HandleFunc(baseURL+"/sensor/{id}", view.DeleteSensor).Methods("DELETE")
 
-	router.HandleFunc(baseURL+"/measure", view.CreateMeasurement).Methods("POST")
-	router.HandleFunc(baseURL+"/measure", view.GetMeasurements).Methods("GET")
-	router.HandleFunc(baseURL+"/measure/{id}", view.GetMeasurementById).Methods("GET")
+	router.HandleFunc(baseURL+"/measurement", view.CreateMeasurement).Methods("POST")
+	router.HandleFunc(baseURL+"/measurement", view.GetMeasurements).Methods("GET")
+	router.HandleFunc(baseURL+"/measurement/{id}", view.GetMeasurementById).Methods("GET")
 	//router.HandleFunc(baseURL+"/temperature", view.UpdateMeasurement).Methods("PUT")
-	router.HandleFunc(baseURL+"/measure/{id}", view.DeleteMeasurement).Methods("DELETE")
+	router.HandleFunc(baseURL+"/measurement/{id}", view.DeleteMeasurement).Methods("DELETE")
 
 	return router
 }

@@ -1,8 +1,13 @@
 package database
 
 import (
+	"log"
+	"os"
+	"time"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type mysqlContext struct {
@@ -30,7 +35,15 @@ func getMySqlInstance() (*mysqlContext, error) {
 //Return error from gorm.Open()
 func (ctx *mysqlContext) Initialize() error {
 
-	db, err := gorm.Open(mysql.Open(ctx.GetConnectionString()), &gorm.Config{})
+	newLogger := logger.New(
+		log.New(os.Stdout, "\n\r", log.LstdFlags),
+		logger.Config{
+			SlowThreshold: time.Second,
+			LogLevel:      logger.Info,
+		},
+	)
+
+	db, err := gorm.Open(mysql.Open(ctx.GetConnectionString()), &gorm.Config{Logger: newLogger})
 	if err == nil {
 		ctx.initialized = true
 		ctx.context = db

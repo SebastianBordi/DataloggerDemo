@@ -6,6 +6,7 @@ import (
 	"github.com/sebastianbordi/DataloggerDemo/configuration"
 	"github.com/sebastianbordi/DataloggerDemo/controller"
 	"github.com/sebastianbordi/DataloggerDemo/database"
+	"github.com/sebastianbordi/DataloggerDemo/model"
 	"github.com/sebastianbordi/DataloggerDemo/router"
 	"github.com/sebastianbordi/DataloggerDemo/server"
 )
@@ -39,6 +40,9 @@ func configureDatabase(config *configuration.DatabaseConf) {
 	if err != nil {
 		log.Panic(err)
 	}
+
+	dbContext.GetContext().AutoMigrate(&model.Sensor{})
+	dbContext.GetContext().AutoMigrate(&model.Measurement{})
 }
 
 func initControllers() {
