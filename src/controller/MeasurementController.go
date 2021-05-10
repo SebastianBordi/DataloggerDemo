@@ -62,8 +62,8 @@ func (controller *measurementController) GetAll() (*[]model.Measurement, error) 
 	context := controller.dataContext.GetContext()
 
 	var result []model.Measurement
-	err := context.Joins("Sensor").Find(&result).Error
-	//err := context.Find(&result).Joins("Sensor").Error
+	//err := context.Joins("Sensor").Find(&result).Error
+	err := context.Joins("Sensor").Joins("LEFT JOIN sensors s ON s.id_sensor = measurements.id_sensor").Find(&result).Error
 	return &result, err
 }
 func (controller *measurementController) GetById(id int) (*model.Measurement, error) {
