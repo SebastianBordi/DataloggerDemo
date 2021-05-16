@@ -29,7 +29,7 @@ func main() {
 func configureDatabase(config *configuration.DatabaseConf) {
 	dataContextFactory := database.GetDataContextFactory()
 
-	dataContextFactory.DatabaseType = database.PostgreSQL
+	dataContextFactory.DatabaseType = database.MySQL
 
 	dbContext := dataContextFactory.GetDataContext()
 	dbContext.SetHost(config.GetHost())
@@ -44,7 +44,8 @@ func configureDatabase(config *configuration.DatabaseConf) {
 	}
 
 	dbContext.GetContext().AutoMigrate(&model.Sensor{})
-	//dbContext.GetContext().AutoMigrate(&model.Measurement{})
+	dbContext.GetContext().AutoMigrate(&model.Measurement{})
+
 }
 
 func initControllers() {

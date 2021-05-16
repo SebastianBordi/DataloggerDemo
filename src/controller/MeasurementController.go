@@ -52,7 +52,7 @@ func (controller *measurementController) CreateFromPostDTO(mesPostDto *model.Mea
 	measurement.Datetime = time.Now()
 	measurement.Temperature = mesPostDto.Temperature
 	measurement.Humidity = mesPostDto.Humidity
-	measurement.IDSensor = sensor.IDSensor
+	//measurement.IDSensor = sensor.IDSensor
 	//measurement.Sensor = sensor
 
 	err = context.Save(&measurement).Error
@@ -63,7 +63,7 @@ func (controller *measurementController) GetAll() (*[]model.Measurement, error) 
 
 	var result []model.Measurement
 	//err := context.Joins("Sensor").Find(&result).Error
-	err := context.Joins("Sensor").Joins("LEFT JOIN sensors s ON s.id_sensor = measurements.id_sensor").Find(&result).Error
+	err := context.Joins("Sensor").Find(&result).Error
 	return &result, err
 }
 func (controller *measurementController) GetById(id int) (*model.Measurement, error) {
