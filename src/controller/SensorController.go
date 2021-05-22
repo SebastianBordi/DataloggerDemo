@@ -53,7 +53,7 @@ func (controller *sensorController) GetById(id int) (*model.Sensor, error) {
 func (controller *sensorController) Update(entity *model.Sensor) (*model.Sensor, error) {
 	context := controller.dataContext.GetContext()
 
-	entityBase, err := controller.GetById(entity.IDSensor)
+	entityBase, err := controller.GetById(int(entity.ID))
 	if err != nil {
 		return nil, err
 	}
