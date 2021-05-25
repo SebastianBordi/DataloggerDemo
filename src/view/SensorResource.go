@@ -18,14 +18,14 @@ func CreateSensor(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&sensor)
 	if err != nil {
 		log.Println(err)
-		basicResponse(&w, 400, "error decoding the body")
+		BasicResponse(&w, 400, "error decoding the body")
 		return
 	}
 	newEntity, err := controller.Create(&sensor)
 
 	if err != nil {
 		log.Println(err)
-		basicResponse(&w, 500, "internal server error")
+		BasicResponse(&w, 500, "internal server error")
 		return
 	}
 	json.NewEncoder(w).Encode(newEntity)
@@ -37,10 +37,10 @@ func GetSensors(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		if err.Error() == "record not found" {
-			basicResponse(&w, 404, "No sensor were found")
+			BasicResponse(&w, 404, "No sensor were found")
 		} else {
 			log.Println(err)
-			basicResponse(&w, 500, "Internal server error")
+			BasicResponse(&w, 500, "Internal server error")
 		}
 		return
 	}
@@ -52,7 +52,7 @@ func GetSensorById(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id, err := strconv.Atoi(params["id"])
 	if err != nil {
-		basicResponse(&w, 400, fmt.Sprintf("Invalid id %s", params["id"]))
+		BasicResponse(&w, 400, fmt.Sprintf("Invalid id %s", params["id"]))
 		return
 	}
 
@@ -60,9 +60,9 @@ func GetSensorById(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		if err.Error() == "record not found" {
-			basicResponse(&w, 404, "No sensor were found")
+			BasicResponse(&w, 404, "No sensor were found")
 		} else {
-			basicResponse(&w, 500, "Internal server error")
+			BasicResponse(&w, 500, "Internal server error")
 		}
 		return
 	}
@@ -76,14 +76,14 @@ func UpdateSensor(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&sensor)
 	if err != nil {
 		log.Println(err)
-		basicResponse(&w, 400, "error decoding the body")
+		BasicResponse(&w, 400, "error decoding the body")
 		return
 	}
 	newEntity, err := controller.Update(&sensor)
 
 	if err != nil {
 		log.Println(err)
-		basicResponse(&w, 500, "internal server error")
+		BasicResponse(&w, 500, "internal server error")
 		return
 	}
 	json.NewEncoder(w).Encode(newEntity)
@@ -94,16 +94,16 @@ func DeleteSensor(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id, err := strconv.Atoi(params["id"])
 	if err != nil {
-		basicResponse(&w, 400, fmt.Sprintf("Invalid id %s", params["id"]))
+		BasicResponse(&w, 400, fmt.Sprintf("Invalid id %s", params["id"]))
 		return
 	}
 	sensor, err := controller.Delete(id)
 
 	if err != nil {
 		if err.Error() == "record not found" {
-			basicResponse(&w, 404, "No measurement were found")
+			BasicResponse(&w, 404, "No measurement were found")
 		} else {
-			basicResponse(&w, 500, "Internal server error")
+			BasicResponse(&w, 500, "Internal server error")
 		}
 		return
 	}

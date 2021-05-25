@@ -8,7 +8,7 @@ type Config struct {
 	database *DatabaseConf
 	baseURL  string //base URL for all endpoints
 	urlPort  string //exposed port for API
-
+	tokenKey string //key fot token decoding
 }
 
 type DatabaseConf struct {
@@ -26,6 +26,7 @@ func GetInstance() (*Config, error) {
 		instance = &Config{}
 		instance.baseURL = os.Getenv("BASE_URL")
 		instance.urlPort = os.Getenv("PORT")
+		instance.tokenKey = os.Getenv("TOKEN_KEY")
 
 		instance.database = &DatabaseConf{}
 		instance.database.host = os.Getenv("DATABASE_HOST")
@@ -53,6 +54,9 @@ func (c Config) GetBaseURL() string {
 }
 func (c Config) GetURLPort() string {
 	return c.urlPort
+}
+func (c Config) GetTokenKey() string {
+	return c.tokenKey
 }
 func (c Config) GetDatabaseConf() *DatabaseConf {
 	return c.database

@@ -53,7 +53,6 @@ func (controller *measurementController) CreateFromPostDTO(mesPostDto *model.Mea
 	measurement.Temperature = mesPostDto.Temperature
 	measurement.Humidity = mesPostDto.Humidity
 	measurement.IDSensor = sensor.ID
-	//measurement.Sensor = sensor
 
 	err = context.Save(&measurement).Error
 	return &measurement, err

@@ -8,7 +8,7 @@ import (
 	"github.com/sebastianbordi/DataloggerDemo/model"
 )
 
-func basicResponse(w *http.ResponseWriter, statusCode int, message string) {
+func BasicResponse(w *http.ResponseWriter, statusCode int, message string) {
 	writer := *w
 	writer.WriteHeader(statusCode)
 	response := &model.BasicResponse{

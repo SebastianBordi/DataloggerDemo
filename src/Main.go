@@ -43,6 +43,7 @@ func configureDatabase(config *configuration.DatabaseConf) {
 
 	dbContext.GetContext().AutoMigrate(&model.Sensor{})
 	dbContext.GetContext().AutoMigrate(&model.Measurement{})
+	dbContext.GetContext().AutoMigrate(&model.User{})
 }
 
 func initControllers() {
@@ -53,4 +54,6 @@ func initControllers() {
 	sensorController.InitSensorController(context)
 	temperatureController := controller.GetMeasurementController()
 	temperatureController.InitMeasurementController(context)
+	userController := controller.GetUserController()
+	userController.InitUserController(context)
 }
