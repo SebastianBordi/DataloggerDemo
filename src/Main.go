@@ -9,6 +9,8 @@ import (
 	"github.com/sebastianbordi/DataloggerDemo/model"
 	"github.com/sebastianbordi/DataloggerDemo/router"
 	"github.com/sebastianbordi/DataloggerDemo/server"
+	"github.com/sebastianbordi/DataloggerDemo/socket"
+	"github.com/sebastianbordi/DataloggerDemo/view"
 )
 
 func main() {
@@ -17,7 +19,7 @@ func main() {
 		log.Panic(err)
 	}
 	configureDatabase(conf.GetDatabaseConf())
-	initControllers()
+	initDependencies()
 	rtr := router.GetRouter(conf.GetBaseURL())
 	srv := server.GetServer(conf.GetURLPort())
 
@@ -46,7 +48,7 @@ func configureDatabase(config *configuration.DatabaseConf) {
 	dbContext.GetContext().AutoMigrate(&model.User{})
 }
 
-func initControllers() {
+func initDependencies() {
 	dataContextFactory := database.GetDataContextFactory()
 	context := dataContextFactory.GetDataContext()
 
@@ -56,4 +58,6 @@ func initControllers() {
 	temperatureController.InitMeasurementController(context)
 	userController := controller.GetUserController()
 	userController.InitUserController(context)
+
+	socket.BasicResponse = view.BasicResponse
 }

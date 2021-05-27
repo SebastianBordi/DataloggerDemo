@@ -1,16 +1,24 @@
 package router
 
 import (
+	"net/http"
+
 	"github.com/gorilla/mux"
+	"github.com/sebastianbordi/DataloggerDemo/socket"
 	"github.com/sebastianbordi/DataloggerDemo/view"
 )
 
 func GetRouter(baseURL string) *mux.Router {
 	router := mux.NewRouter()
 
-	//TODO: Create static file server for de web page
+	router.HandleFunc("/", redirectFunc)
 
-	//TODO: Create endpoint for web sockets
+	router.NotFoundHandler = http.HandlerFunc(redirectFunc)
+
+	fileServer := http.FileServer(http.Dir("./www"))
+	router.Handle("/webpage", http.StripPrefix("/webpage", fileServer)).Methods("GET")
+
+	router.HandleFunc(baseURL+"/socket-subscribe/{isBroadcaster}/{mac}", socket.SocketEndpoint).Methods("GET")
 
 	router.HandleFunc(baseURL+"/login", view.Login).Methods("POST")
 	router.HandleFunc(baseURL+"/sensor", view.JWTAuth(view.CreateSensor)).Methods("POST")
@@ -26,4 +34,9 @@ func GetRouter(baseURL string) *mux.Router {
 	router.HandleFunc(baseURL+"/measurement/{id}", view.JWTAuth(view.DeleteMeasurement)).Methods("DELETE")
 
 	return router
+}
+
+func redirectFunc(rw http.ResponseWriter, r *http.Request) {
+	rw.Header().Add("Location", "/webpage")
+	rw.WriteHeader(301)
 }
