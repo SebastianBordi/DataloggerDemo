@@ -33,13 +33,18 @@ func getMySqlInstance() (*mysqlContext, error) {
 
 //Initialize with parameters of current databaseContext structure
 //Return error from gorm.Open()
-func (ctx *mysqlContext) Initialize() error {
-
+func (ctx *mysqlContext) Initialize(dev ...bool) error {
+	var logLevel logger.LogLevel
+	if dev[0] {
+		logLevel = logger.Info
+	} else {
+		logLevel = logger.Silent
+	}
 	newLogger := logger.New(
 		log.New(os.Stdout, "\n\r", log.LstdFlags),
 		logger.Config{
 			SlowThreshold: time.Second,
-			LogLevel:      logger.Info,
+			LogLevel:      logLevel,
 		},
 	)
 

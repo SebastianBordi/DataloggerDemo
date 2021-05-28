@@ -6,6 +6,7 @@ import (
 	"github.com/sebastianbordi/DataloggerDemo/configuration"
 	"github.com/sebastianbordi/DataloggerDemo/controller"
 	"github.com/sebastianbordi/DataloggerDemo/database"
+	"github.com/sebastianbordi/DataloggerDemo/middleware"
 	"github.com/sebastianbordi/DataloggerDemo/model"
 	"github.com/sebastianbordi/DataloggerDemo/router"
 	"github.com/sebastianbordi/DataloggerDemo/server"
@@ -18,27 +19,30 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
-	configureDatabase(conf.GetDatabaseConf())
+	configureDatabase(conf)
 	initDependencies()
 	rtr := router.GetRouter(conf.GetBaseURL())
 	srv := server.GetServer(conf.GetURLPort())
 
-	srv.Handler = rtr
-	log.Printf("Listen and serve at :%s", conf.GetURLPort())
+	srv.Handler = middleware.Middleware(rtr)
+
+	log.Printf("Running in %s mode", conf.GetEnvironment())
+	log.Printf("Listen and serve at :%s, base api url = %s", conf.GetURLPort(), conf.GetBaseURL())
 	log.Fatal(srv.ListenAndServe())
 }
 
-func configureDatabase(config *configuration.DatabaseConf) {
+func configureDatabase(config *configuration.Config) {
 	dataContextFactory := database.GetDataContextFactory()
 
 	dbContext := dataContextFactory.GetDataContext()
-	dbContext.SetHost(config.GetHost())
-	dbContext.SetPort(config.GetPort())
-	dbContext.SetDatabase(config.GetDatabase())
-	dbContext.SetUser(config.GetUser())
-	dbContext.SetPassword(config.GetPassword())
+	dbContext.SetHost(config.GetDatabaseConf().GetHost())
+	dbContext.SetPort(config.GetDatabaseConf().GetPort())
+	dbContext.SetDatabase(config.GetDatabaseConf().GetDatabase())
+	dbContext.SetUser(config.GetDatabaseConf().GetUser())
+	dbContext.SetPassword(config.GetDatabaseConf().GetPassword())
 
-	err := dbContext.Initialize()
+	isDevMode := config.GetEnvironment() == configuration.DEVELOPMENT
+	err := dbContext.Initialize(isDevMode)
 	if err != nil {
 		log.Panic(err)
 	}

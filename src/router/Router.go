@@ -20,6 +20,8 @@ func GetRouter(baseURL string) *mux.Router {
 
 	router.HandleFunc(baseURL+"/socket-subscribe/{isBroadcaster}/{mac}", socket.SocketEndpoint).Methods("GET")
 
+	router.PathPrefix(baseURL).HandlerFunc(view.CorsOptionEndpoint).Methods("OPTIONS")
+
 	router.HandleFunc(baseURL+"/login", view.Login).Methods("POST")
 	router.HandleFunc(baseURL+"/sensor", view.JWTAuth(view.CreateSensor)).Methods("POST")
 	router.HandleFunc(baseURL+"/sensor", view.GetSensors).Methods("GET")

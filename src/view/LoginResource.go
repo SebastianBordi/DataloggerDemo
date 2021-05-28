@@ -72,7 +72,7 @@ func JWTAuth(next http.HandlerFunc) http.HandlerFunc {
 		}
 		tokenKey := conf.GetTokenKey()
 
-		valid, _, err := security.ValidateToken(authorization[:6], tokenKey)
+		valid, _, err := security.ValidateToken(authorization[7:], tokenKey)
 		if err != nil {
 			log.Println(err)
 			BasicResponse(&rw, 500, "Internal server error")
