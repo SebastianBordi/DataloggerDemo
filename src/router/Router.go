@@ -15,8 +15,8 @@ func GetRouter(baseURL string) *mux.Router {
 
 	router.NotFoundHandler = http.HandlerFunc(redirectFunc)
 
-	fileServer := http.FileServer(http.Dir("./www"))
-	router.Handle("/webpage", http.StripPrefix("/webpage", fileServer)).Methods("GET")
+	fileServer := http.FileServer(http.Dir("/ftp"))
+	router.Handle("/", http.StripPrefix("/", fileServer)).Methods("GET")
 
 	router.HandleFunc(baseURL+"/socket-subscribe/{isBroadcaster}/{mac}", socket.SocketEndpoint).Methods("GET")
 
@@ -39,6 +39,6 @@ func GetRouter(baseURL string) *mux.Router {
 }
 
 func redirectFunc(rw http.ResponseWriter, r *http.Request) {
-	rw.Header().Add("Location", "/webpage")
-	rw.WriteHeader(301)
+	// rw.Header().Add("Location", "/index.html")
+	// rw.WriteHeader(301)
 }

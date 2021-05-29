@@ -3,6 +3,7 @@ package view
 import (
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/sebastianbordi/DataloggerDemo/configuration"
 	"github.com/sebastianbordi/DataloggerDemo/util"
@@ -20,17 +21,17 @@ func CorsOptionEndpoint(w http.ResponseWriter, r *http.Request) {
 }
 
 func SetHeaders(w http.ResponseWriter, r *http.Request, config configuration.Config) {
-	origin := r.Header.Get("Origin")
+	origin := strings.Trim(r.Header.Get("Origin"), "/")
 	method := r.Method
 
 	if config.GetEnvironment() == configuration.DEVELOPMENT {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Origin", origin)
 		w.Header().Set("Access-Control-Allow-Header", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "*")
+		w.Header().Set("Access-Control-Allow-Methods", r.Method)
 	} else {
 		if util.StringContains(config.GetAllowedOrigins(), origin) {
 			w.Header().Set("Access-Control-Allow-Origin", origin)
-			w.Header().Set("Access-Control-Allow-Header", "*")
+			w.Header().Set("Access-Control-Allow-Header", "content-type")
 			w.Header().Set("Access-Control-Allow-Method", method)
 		}
 	}

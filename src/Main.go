@@ -25,7 +25,9 @@ func main() {
 	srv := server.GetServer(conf.GetURLPort())
 
 	srv.Handler = middleware.Middleware(rtr)
+	//srv.Handler = rtr
 
+	log.Println("Datalogger Demo Backend v0.1-beta")
 	log.Printf("Running in %s mode", conf.GetEnvironment())
 	log.Printf("Listen and serve at :%s, base api url = %s", conf.GetURLPort(), conf.GetBaseURL())
 	log.Fatal(srv.ListenAndServe())
