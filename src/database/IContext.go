@@ -9,5 +9,5 @@ type IContext interface {
 	SetDatabase(string)
 	SetUser(string)
 	SetPassword(string)
-	Initialize() error
+	Initialize(...bool) error
 }

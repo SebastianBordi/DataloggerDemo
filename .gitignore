@@ -1,1 +1,3 @@
 .vscode/
+src/__debug_bin
+docker-compose.yaml

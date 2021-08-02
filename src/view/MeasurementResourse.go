@@ -18,18 +18,18 @@ func CreateMeasurement(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&measurementDto)
 	if err != nil {
 		log.Println(err)
-		basicResponse(&w, 400, "can't decode body request")
+		BasicResponse(&w, 400, "can't decode body request")
 		return
 	}
 	measurement, err := controller.CreateFromPostDTO(&measurementDto)
 
 	if err != nil {
 		if err.Error() == "bad password" || err.Error() == "mac not found" {
-			basicResponse(&w, 401, "error identifying sensor")
+			BasicResponse(&w, 401, "error identifying sensor")
 			return
 		}
 		log.Println(err)
-		basicResponse(&w, 400, "can't decode body request")
+		BasicResponse(&w, 400, "can't decode body request")
 		return
 	}
 	json.NewEncoder(w).Encode(measurement)
@@ -41,9 +41,9 @@ func GetMeasurements(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		if err.Error() == "record not found" {
-			basicResponse(&w, 404, "No measurement were found")
+			BasicResponse(&w, 404, "No measurement were found")
 		} else {
-			basicResponse(&w, 500, "Internal server error")
+			BasicResponse(&w, 500, "Internal server error")
 		}
 		return
 	}
@@ -56,7 +56,7 @@ func GetMeasurementById(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id, err := strconv.Atoi(params["id"])
 	if err != nil {
-		basicResponse(&w, 400, fmt.Sprintf("Invalid id %s", params["id"]))
+		BasicResponse(&w, 400, fmt.Sprintf("Invalid id %s", params["id"]))
 		return
 	}
 
@@ -64,9 +64,9 @@ func GetMeasurementById(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		if err.Error() == "record not found" {
-			basicResponse(&w, 404, "No measurement were found")
+			BasicResponse(&w, 404, "No measurement were found")
 		} else {
-			basicResponse(&w, 500, "Internal server error")
+			BasicResponse(&w, 500, "Internal server error")
 		}
 		return
 	}
@@ -83,16 +83,16 @@ func DeleteMeasurement(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id, err := strconv.Atoi(params["id"])
 	if err != nil {
-		basicResponse(&w, 400, fmt.Sprintf("Invalid id %s", params["id"]))
+		BasicResponse(&w, 400, fmt.Sprintf("Invalid id %s", params["id"]))
 		return
 	}
 	measurement, err := controller.Delete(id)
 
 	if err != nil {
 		if err.Error() == "record not found" {
-			basicResponse(&w, 404, "No measurement were found")
+			BasicResponse(&w, 404, "No measurement were found")
 		} else {
-			basicResponse(&w, 500, "Internal server error")
+			BasicResponse(&w, 500, "Internal server error")
 		}
 		return
 	}
